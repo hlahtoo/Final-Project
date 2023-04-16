@@ -1,4 +1,9 @@
 import csv
+from string import digits, ascii_letters
+
+ALL_LETTERS_DIGITS = digits + ascii_letters
+KEY = '9TUw5BcdL2kFAlezQs7PH6boIuJ3RiGxMprEmaN8Sh4gtO1WyqKZXnYDVv0Cfj'
+
 class patient:
     def __init__(self, first_name, last_name,age, gender, date_of_birth, visits=[]) -> None:
         self.__first_name = first_name
@@ -46,11 +51,19 @@ class patient:
     def add_visit_as_dict(self, visit: dict):
         self.visits.append(visit)
     
+    def display_general_info(self):
+        print(f"Name: {self.__first_name} {self.__last_name}")
+        print(f"age : {self.__age}")
+        print(f"Gender : {self.__gender}")
+        print(f"Date of Birth: {self.__date_of_birth}")
+        print('--------------------------------------------')
+    
     def display_all_info(self):
         print(f"Name: {self.__first_name} {self.__last_name}")
         print(f"age : {self.__age}")
         print(f"Gender : {self.__gender}")
         print(f"Date of Birth: {self.__date_of_birth}")
+        
         for visit in self.visits:
             print("*"*50)
             print(f"         Summary of visit on " + visit["date"])
@@ -61,6 +74,7 @@ class patient:
             print("Oxygen Saturation: " + str(visit["oxygen_saturation"]))
             print("Symptoms: " + visit["symptoms"])
             print("Instructions: " + visit["instructions"])
+            print('-'*50)
 
     def f_name_w_last_ini(self):
         return self.__first_name + self.__last_name[0] +  ".csv"
@@ -70,7 +84,7 @@ class patient:
         return [self.__first_name, self.__last_name, self.__age, self.__gender, self.__date_of_birth, first_name_w_l_ini]
 
     def __str__(self) -> str:
-        string = f"{self.__first_name} {self.__last_name}, {self.__age}, {self.__gender}, {self.__date_of_birth}\n"
+        string = f"{self.__first_name} {self.__last_name}, {self.__age}, {self.__gender}, {self.__date_of_birth}"
 
         return string
 
@@ -84,6 +98,9 @@ class hospitalRecord:
         return self.__patients
 
     def add_patient(self, person: patient):
+        """
+        Adds patient to hospital record data
+        """
         if not isinstance(person, patient ):
             raise TypeError("Person has to be patient class")
         else:
@@ -107,12 +124,30 @@ class hospitalRecord:
         print("There is no patient with the provided name at this hospital")
         return None
     
+    def patient_by_index(self, index: int):
+        if index >= len(self.__patients):
+            raise IndexError("Index out of range")
+        else:
+            return self.__patients[index]
+    
     def size(self):
         return len(self.__patients)
     
     def __str__(self) -> str:
         return f"{self.name} ({self.size()} patients)"
-        
+
+class AdminAccount:
+    def __init__(self, username, password):
+        self.__username = username
+        self.__password = password
+    
+    @property
+    def username(self):
+        return self.__username
+    
+    @property
+    def password(self):
+        return self.__password       
 
 def load_record_from_file(filename:str):
     name = filename[:-4]
@@ -146,9 +181,148 @@ def save_record_to_file(record: hospitalRecord) -> None:
                 for visit in person.visits:
                     csv_visit_writer.writerow(visit)
 
-John = load_record_from_file("John.csv")
-John.patients[0].display_all_info()
 
+
+
+def login():
+    """function for login
+    """
+    print("Log in to your account")
+    username = input("Please enter your username: ")
+    password = input("Please enter your password: ")
+    loaded_accounts = load_accounts('account.csv')
+    
+    for acc in loaded_accounts:
+        if username == acc.username and password == acc.password:
+            return True
+        else:
+            print("Username or password is incorrect! Please enter again")
+            return login()
+
+
+def split_str(msg: str, lst: list) -> list[str]:
+    """
+    Split the string and add each of the letter in the list.
+    For Example:
+        >>> split_str("abc", lst)
+        [a, b, c]
+    Args:
+        msg (str) : msg to split
+        lst (list) : list that the splitted msg will be added
+    Returns:
+        lst[str] : list with msg elements
+    """
+    # use for loop to loop through the msg and append the lst
+    for i in range(len(msg)):
+        lst.append(msg[i])
+    return lst
+
+
+def add_str(lst: list) -> str:
+    """
+    Add the letters in the lst back together to create the string
+    For Example:
+        >>> add_str([a, b, c])
+            abc
+    Args:
+        lst (list) : list that you want to create the string by adding 
+                    together
+    Returns:
+        str: the convereted_msg (created by addng the elements in the list)
+    """
+    # create a empty string
+    converted_msg = ''
+    # add each element of the list one by one
+    for i in lst:
+        converted_msg += i
+    return converted_msg
+
+
+def change_letter(lst: list, key_for_index: str, key_for_change: str) -> list[str]:
+    """
+    Change or convert the elements in the list from one key to another
+    i.e, can convert from ALL_LETTER_DIGITS to RANDOMKEY or
+    from RANDOMKEY to ALL_LETTER_DIGITS
+    For Example:
+        >>> change_letter(["a", "b", "c"], "abc", "def" )
+            ["d", "e", "f"]
+        >>> change_letter(["b", "a", 1], "abc", "def")
+            ["e", "d", 1]
+    Args:
+        lst (lst): list of elements to convert 
+        key_for_index (str): the key string to get the index from
+        key_for_change (str): the key that will be used to convert
+    Returns:
+        list : the list with the converted elements
+    """
+    for i in range(len(lst)):
+        # use count function to check if the element will be in key_for_index
+        if key_for_index.count(lst[i]) > 0:
+            # get the index from key_for_index related to element
+            index_key = key_for_index.index(lst[i])
+            # change the element in accordance with the related index
+            lst[i] = key_for_change[index_key]
+        else:
+            # if element doesnt exist in key_for_index, skip
+            pass
+    return lst
+
+def encrypt(msg: str, key: str = KEY) -> str:
+    """
+    Convert the string in msg to encrypted msg using the key
+    For Example:
+        >>> encrypt("abc", "3WcqHN64fwYOuheZ2B9axvmr7RLT5i08snCFpoSAdKztJXIGEMUVgPkQjDl1by")
+            "YOu"
+    Arguments:
+        msg (str) : the string that you want to encrypt or convert
+        key (str) : the key that will be used for encryption
+    Returns:
+        str : encrypted or converted string using the key provided
+    """
+    # create an empty list to add the converted letter
+    lst = []
+    # split the msg and add them to the list
+    split_str(msg, lst)
+    # Encrypting each letter in the list using change_letter function
+    change_letter(lst, ALL_LETTERS_DIGITS, key)
+    # create the str by adding the elements in the list and return
+    return add_str(lst)
+
+
+def decrypt(msg, key) -> str:
+    """
+    Convert the encrypted str in msg to decrypted msg using the key
+    For Example:
+        >>>decrypt("YOu", "3WcqHN64fwYOuheZ2B9axvmr7RLT5i08snCFpoSAdKztJXIGEMUVgPkQjDl1by")
+            "abc"
+    Arguments:
+        msg (str) : the string that you want to decrypt
+        key (str) : the key that will be used to decrypt the msg
+    Returns:
+        Str : Decrypted string using the key provided
+    """
+    # create an empty list to add the converted letter
+    lst = []
+    # Split the msg and add them to the list
+    split_str(msg, lst)
+    # Decrypting each letter in the list using change_letter func
+    change_letter(lst, key, ALL_LETTERS_DIGITS)
+    # create the str by adding the elements in the list and return
+    return add_str(lst)
+
+
+def load_accounts(filename):
+    key = '9TUw5BcdL2kFAlezQs7PH6boIuJ3RiGxMprEmaN8Sh4gtO1WyqKZXnYDVv0Cfj'
+    lst = []
+    with open(filename, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            decrypt_user = decrypt(row['username'], key)
+            decrypt_pw = decrypt(row["password"], key)
+            lst.append(AdminAccount(decrypt_user, decrypt_pw))
+    return lst
+
+"""
 a = patient('Hla', "Htoo", "24", "Male", "04/06/1233")
 a.add_visit_manually("04/09/2023", "102/70", 98, 83, 87, "Headache/ Nasuea", "Nambudiri", "Drink more water")
 a.add_visit_manually("04/09/2024", "103/70", 97, 84, 100, "Pelvis Pain", "Nambudiri", "Please get CT done for pelvis area")
@@ -156,12 +330,10 @@ a.add_visit_manually("04/09/2024", "103/70", 97, 84, 100, "Pelvis Pain", "Nambud
 v = patient('Srija', "Ga", "24", "Male", "04/06/1233")
 v.add_visit_manually("04/09/2023", "102/70", 98, 83, 87, "Headache/ Nasuea", "Nambudiri", "Drink more water")
 v.add_visit_manually("04/09/2024", "103/70", 97, 84, 100, "Pelvis Pain", "Nambudiri", "Please get CT done for pelvis area")
-#v.display_all_info()
+
 
 John_hopkhins = hospitalRecord("John Hopkins")
 John_hopkhins.add_patient(a)
 John_hopkhins.add_patient(v)
-
-#save_record_to_file(John_hopkhins)
-J = load_record_from_file("John Hopkins.csv")
-J.patients[0].display_all_info()
+if None:
+    print(John_hopkhins.find_patient('hla htoo'))"""

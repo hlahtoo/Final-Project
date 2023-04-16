@@ -2,19 +2,38 @@ from enum import Enum
 import sys
 import classes
 from typing import Tuple
-from string import punctuation
+from string import punctuation, digits, ascii_letters
 
-class ViewOptions(Enum):
+
+class ViewOptionsAdmin(Enum):
     """ The options for the view """
     EXIT = 1
-    LIST = 2
-    ADD = 3
-    REMOVE = 4
-    COMPLETE = 5
-    SAVE = 6
-    LOAD = 7
-    NEW = 8
-    UNKNOWN = 9
+    LOAD = 2
+    CREATE = 3
+    LIST = 4
+    ADD = 5
+    ADDVISIT = 6
+    REMOVE = 7
+    VIEW = 8
+    NEWACCOUNT = 9
+
+
+    SAVE = 10
+    UNKNOWN = 11
+
+def print_menu() -> None:
+    """ Print the menu """
+    print('Type any of the following commands. You can also type the number.')
+    print('1. Exit - exit the program. It will save the list if one is loaded')
+    print('2. Load - load a record from a file.')
+    print('3. Create - Create a new hospital record')
+    print('4. List - list the patients in the hospital record (if a list has been loaded)')
+    print('5. Add - Add a patient to the hospital record')
+    print("6. Add Visit - Add a visit summary to patient's data in the hospital record (if a patient exists)")
+    print('7. Remove -  Remove a patient from the hospital record')
+    print('8. View - View the patient record (general info and visit summaries)')
+    print('6. Save - save the list to a file.')
+    
 
 def print_welcome() -> None:
     """ Print the welcome message """
@@ -34,14 +53,6 @@ def print_error(message: str) -> None:
     """
     print(f'Error: {message}', file=sys.stderr)
 
-def print_list(hospital_record: classes.hospitalRecord) -> None:
-    """ Print the list
-    Args:
-        todo_list (TodoList): list to print
-    """
-    print(hospital_record)
-    for i in range(0, todolist.size()):
-        print(f'{i+1}. {todolist.get_item(i)}')
         
 def get_filename() -> str:
     """ Get the filename from the user
@@ -55,7 +66,7 @@ def get_filename() -> str:
         print_error('Filename must end with .csv')
         return get_filename()
     
-def get_list_name() -> str:
+def get_hospital_name() -> str:
     """ Get the list name from the user. 
     The name may not contain any punctuation or spaces.
     Returns:
@@ -64,7 +75,7 @@ def get_list_name() -> str:
     name = input('Enter a list name: ').strip()
     if any(char in name for char in punctuation) or ' ' in name:
         print_error('List name may not contain punctuation or spaces')
-        return get_list_name()
+        return get_hospital_name()
     else:
         return name
 
@@ -80,7 +91,20 @@ def get_add_info() -> Tuple[str, str]:
     dob = input('Enter the date of birth of the patient: ').strip()
     return (first_name, last_name, age, gender, dob)
 
-def get_add_visit():
+def get_patient_info_for_visit(record: classes.hospitalRecord):
+    first_name = input("Enter the first name of the patient: ")
+    last_name = input("Enter the last name of the patient: ")
+    name = f'{first_name} {last_name}'
+    person = record.find_patient(name)
+    print(name, person)
+    if person == None:
+        print("Patient not found!")
+        get_patient_info_for_visit(record)
+    else:
+        return person
+    
+
+def get_add_visit_info():
     
     date = input('Enter the date of the visit: ').strip()
     blood_pressure = input('Enter the blood pressure of the patient: ').strip()
@@ -91,3 +115,29 @@ def get_add_visit():
     doctor = input('Enter the name of the doctor who saw the patient: ').strip()
     instructions = input('Enter the instructions of the doctor: ').strip()
     return (date, blood_pressure, temp, pulse, oxy_saturation, symptoms, doctor, instructions)
+
+def get_command_admin():
+    
+    command = input('What would you like to do? ').strip().lower()
+    if command == 'exit' or command == '1':
+        return (ViewOptionsAdmin.EXIT)
+    elif command == 'load' or command == '2':
+        return (ViewOptionsAdmin.LOAD)
+    elif command == 'create' or command == '3':
+        return (ViewOptionsAdmin.CREATE)
+    elif command == 'list' or command == '4':
+        return (ViewOptionsAdmin.LIST)
+    elif command == 'add' or command == '5':
+        return (ViewOptionsAdmin.ADD)
+    elif command == 'add visit' or command == '6':
+        return (ViewOptionsAdmin.ADDVISIT)
+    elif command == 'remove' or command == '7':
+        return (ViewOptionsAdmin.REMOVE)
+    elif command == 'view' or command == '8':
+        return (ViewOptionsAdmin.VIEW)
+    elif command == 'newaccount' or command == '9':
+        return (ViewOptionsAdmin.NEWACCOUNT)
+    elif command == 'save' or command == '10':
+        return (ViewOptionsAdmin.VIEW)
+    else:
+        return (ViewOptionsAdmin.UNKNOWN)
