@@ -5,6 +5,20 @@ ALL_LETTERS_DIGITS = digits + ascii_letters
 KEY = '9TUw5BcdL2kFAlezQs7PH6boIuJ3RiGxMprEmaN8Sh4gtO1WyqKZXnYDVv0Cfj'
 
 class patient:
+    """
+    Patient class have first name, last name, age, gender, date of birth and visit summaries of the patient.
+    
+    It prints the name, age, gender, and date of birth in a nicely formatted string,
+    has different methods.
+    1. name() - a method that returns the first and last name of the patient
+    2. add_visit_manually() - a method that allows you to add the visit summary by input
+    3. add_visit_as_dict() - a method that allows you to add the visit summary with the dict with all the info
+    4. display_general_info() - a method that displays the name, age, gender, date of birth of the patient
+    5. display_all_info() - a method that displays all infos of the patients
+    6. f_name_w_last_ini() - a method that returns first name with last name initial and ended with .csv
+    7. display_as_list() - a method that returns the list that includes first name, last name, age, gender, dob and firstname with lastname initial.
+    8. 
+    """
     def __init__(self, first_name, last_name,age, gender, date_of_birth, visits=[]) -> None:
         self.__first_name = first_name
         self.__last_name = last_name
@@ -191,13 +205,21 @@ def login():
     username = input("Please enter your username: ")
     password = input("Please enter your password: ")
     loaded_accounts = load_accounts('account.csv')
-    
+    account_matched = False
     for acc in loaded_accounts:
+        #print(acc.username, acc.password)
         if username == acc.username and password == acc.password:
-            return True
+            account_matched = True
+        """
         else:
-            print("Username or password is incorrect! Please enter again")
-            return login()
+            
+            return login()"""
+    if not account_matched:
+        print("Username or password is incorrect! Please enter again")
+        return login()
+    else:
+        return account_matched
+    
 
 
 def split_str(msg: str, lst: list) -> list[str]:

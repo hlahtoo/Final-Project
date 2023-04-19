@@ -6,7 +6,7 @@ from string import punctuation, digits, ascii_letters
 
 
 class ViewOptionsAdmin(Enum):
-    """ The options for the view """
+    """ The options for the admin's view """
     EXIT = 1
     LOAD = 2
     CREATE = 3
@@ -16,10 +16,10 @@ class ViewOptionsAdmin(Enum):
     REMOVE = 7
     VIEW = 8
     NEWACCOUNT = 9
+    CHANGEACCOUNT = 10
+    SAVE = 11
+    UNKNOWN = 12
 
-
-    SAVE = 10
-    UNKNOWN = 11
 
 def print_menu() -> None:
     """ Print the menu """
@@ -32,19 +32,23 @@ def print_menu() -> None:
     print("6. Add Visit - Add a visit summary to patient's data in the hospital record (if a patient exists)")
     print('7. Remove -  Remove a patient from the hospital record')
     print('8. View - View the patient record (general info and visit summaries)')
-    print('6. Save - save the list to a file.')
-    
+    print('9. New Account -  Create a new admin account')
+    print('10. Change Account -  Log in to a different account')
+    print('11. Save - save the list to a file.')
+
 
 def print_welcome() -> None:
     """ Print the welcome message """
     print('Welcome to the hospital management tool')
     print('Type "help" to get a list of commands.')
     print()
-    
+
+
 def print_goodbye() -> None:
     """ Print the goodbye message """
     print('Goodbye! Thank you for using our app!')
     print('Have a nice day!')
+
 
 def print_error(message: str) -> None:
     """ Print an error message
@@ -53,7 +57,7 @@ def print_error(message: str) -> None:
     """
     print(f'Error: {message}', file=sys.stderr)
 
-        
+     
 def get_filename() -> str:
     """ Get the filename from the user
     Returns:
@@ -65,7 +69,22 @@ def get_filename() -> str:
     else:
         print_error('Filename must end with .csv')
         return get_filename()
-    
+
+
+def get_record_name() -> str:
+    """ Get the list name from the user. 
+    The name may not contain any punctuation or spaces.
+    Returns:
+        str: list name
+    """
+    name = input('Enter a list name: ').strip()
+    if any(char in name for char in punctuation) or ' ' in name:
+        print_error('List name may not contain punctuation or spaces')
+        return get_record_name()
+    else:
+        return name
+
+
 def get_hospital_name() -> str:
     """ Get the list name from the user. 
     The name may not contain any punctuation or spaces.
@@ -79,6 +98,7 @@ def get_hospital_name() -> str:
     else:
         return name
 
+
 def get_add_info() -> Tuple[str, str]:
     """ Get the information for adding a todo item
     Returns:
@@ -91,21 +111,37 @@ def get_add_info() -> Tuple[str, str]:
     dob = input('Enter the date of birth of the patient: ').strip()
     return (first_name, last_name, age, gender, dob)
 
+
 def get_patient_info_for_visit(record: classes.hospitalRecord):
+    """
+    gets the patient from the record
+    Args:
+    record(hospitalRecord) : the record which includes the patient that you would like to get
+    returns:
+    the person(patient) : the patient that matches with the input name
+    """
     first_name = input("Enter the first name of the patient: ")
     last_name = input("Enter the last name of the patient: ")
     name = f'{first_name} {last_name}'
+    # find the patient using the name
     person = record.find_patient(name)
-    print(name, person)
+    #print(name, person)
+    # if it is not found, it will return None
     if person == None:
         print("Patient not found!")
-        get_patient_info_for_visit(record)
+        # use recursion to get the name and search again
+        return get_patient_info_for_visit(record)
     else:
+        # if found, return the person
         return person
     
 
 def get_add_visit_info():
-    
+    """
+    gets the user input necessary to add the visit summary
+    Returns:
+    date, blood_pressure, temp, pulse, oxy_saturation, symptoms, doctor, instructions
+    """
     date = input('Enter the date of the visit: ').strip()
     blood_pressure = input('Enter the blood pressure of the patient: ').strip()
     temp = input('Enter the temperature of the patient: ').strip()
@@ -116,8 +152,14 @@ def get_add_visit_info():
     instructions = input('Enter the instructions of the doctor: ').strip()
     return (date, blood_pressure, temp, pulse, oxy_saturation, symptoms, doctor, instructions)
 
+
 def get_command_admin():
-    
+    """
+    gets the input from the user and return the corresponding option
+    returns:
+    command that corresponds with the input
+    """
+
     command = input('What would you like to do? ').strip().lower()
     if command == 'exit' or command == '1':
         return (ViewOptionsAdmin.EXIT)
@@ -137,7 +179,9 @@ def get_command_admin():
         return (ViewOptionsAdmin.VIEW)
     elif command == 'newaccount' or command == '9':
         return (ViewOptionsAdmin.NEWACCOUNT)
-    elif command == 'save' or command == '10':
-        return (ViewOptionsAdmin.VIEW)
+    elif command == 'changeaccount' or command == '10':
+        return (ViewOptionsAdmin.CHANGEACCOUNT)
+    elif command == 'save' or command == '11':
+        return (ViewOptionsAdmin.SAVE)
     else:
         return (ViewOptionsAdmin.UNKNOWN)
