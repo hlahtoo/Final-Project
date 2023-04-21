@@ -10,10 +10,11 @@ from string import digits, ascii_letters
 ALL_LETTERS_DIGITS = digits + ascii_letters
 KEY = '9TUw5BcdL2kFAlezQs7PH6boIuJ3RiGxMprEmaN8Sh4gtO1WyqKZXnYDVv0Cfj'
 
+
 class patient:
     """
     Patient class have first name, last name, age, gender, date of birth and visit summaries of the patient.
-    
+
     It prints the name, age, gender, and date of birth in a nicely formatted string,
     has different methods.
     1. name() - a method that returns the first and last name of the patient
@@ -24,7 +25,7 @@ class patient:
     6. f_name_w_last_ini() - a method that returns first name with last name initial and ended with .csv
     7. display_as_list() - a method that returns the list that includes first name, last name, age, gender, dob and firstname with lastname initial.
     8. It prints in a nicely formatted string as well
-    
+
     Attributes:
         firt_name (str) : the first name of the patient
         last_name (str) : the last name of the patient
@@ -33,7 +34,8 @@ class patient:
         date_of_birth (Str) : date of birth of patient
         visits (lst) : list of visit summaries of the patient
     """
-    def __init__(self, first_name, last_name,age, gender, date_of_birth, visits=[]) -> None:
+    def __init__(self, first_name: str, last_name: str,
+                 age: int, gender: str, date_of_birth: str, visits: list = []) -> None:
         self.__first_name = first_name
         self.__last_name = last_name
         self.__age = age
@@ -70,7 +72,9 @@ class patient:
         """ returns the first and last name of the patient"""
         return f"{self.__first_name} {self.__last_name}"
 
-    def add_visit_manually(self, date:str, blood_pressure:str, temp:int, pulse:int, oxygen_saturation:int, symptoms:str, doctor_name:str, instructions:str):
+    def add_visit_manually(self, date: str, blood_pressure: str,
+                           temp: int, pulse: int, oxygen_saturation: int,
+                           symptoms: str, doctor_name: str, instructions: str):
         """
         add visit summmary manually as a dictionary to the list
         Args:
@@ -96,7 +100,7 @@ class patient:
         visit["instructions"] = instructions
         # then add the updated dict to the "visits" list of the patient
         self.visits.append(visit)
-    
+
     def add_visit_as_dict(self, visit: dict):
         """
         add the visit summary to "visits" list of the patient directly if the 
@@ -106,7 +110,7 @@ class patient:
         """
         # add the dict to the "visits" list of the patient
         self.visits.append(visit)
-    
+
     def display_general_info(self):
         """print the general info of the patient in a nice format"""
         # print name
@@ -118,7 +122,7 @@ class patient:
         # print date of birth
         print(f"Date of Birth: {self.__date_of_birth}")
         print('--------------------------------------------')
-    
+
     def display_all_info(self):
         """Print general info and all visit summaries in a nice format"""
         # print name
@@ -132,7 +136,7 @@ class patient:
         # loop through each of the visit in "visits" list of the patient
         for visit in self.visits:
             # print all the keys with their respective values
-            print("*"*50)
+            print("*" * 50)
             print(f"         Summary of visit on " + visit["date"])
             print("You met with " + visit["doctor"])
             print("Blood Pressure: " + str(visit["blood_pressure"]))
@@ -141,12 +145,12 @@ class patient:
             print("Oxygen Saturation: " + str(visit["oxygen_saturation"]))
             print("Symptoms: " + visit["symptoms"])
             print("Instructions: " + visit["instructions"])
-            print('-'*50)
+            print('-' * 50)
 
     def f_name_w_last_ini(self):
         """returns first name and last name's first initial with .csv added at the end """
-        return self.__first_name + self.__last_name[0] +  ".csv"
-    
+        return self.__first_name + self.__last_name[0] + ".csv"
+
     def display_as_list(self):
         """returns a list of first name, last name, age , gender , date of birth, and the result from f_name_w_l_ini function"""
         # get the first name and last name's first initial with .csv added at the end
@@ -159,10 +163,11 @@ class patient:
 
         return string
 
+
 class hospitalRecord:
     """
     hospitalRecrod class have name,and a list of patients
-    
+
     It prints the name, and the list of patients in a nicely formatted string,
     has different methods.
     1. add_patient(person) : adds person to the hospital record
@@ -175,7 +180,7 @@ class hospitalRecord:
         name (str) : the name of the hospital
         patients (lst) : list of the patients in the hospital
     """
-    def __init__(self, name: str, patients:list =[]):
+    def __init__(self, name: str, patients: list = []):
         self.name = name
         self.__patients = patients.copy()
 
@@ -226,7 +231,7 @@ class hospitalRecord:
         # if not, return None with the prompt
         print("There is no patient with the provided name at this hospital")
         return None
-    
+
     def patient_by_index(self, index: int):
         """
         Finds and returns the patient by the index
@@ -239,14 +244,15 @@ class hospitalRecord:
         else:
             # if not, return the patient at the index
             return self.__patients[index]
-    
+
     def size(self):
         """Returns the total number of patients in the record"""
         return len(self.__patients)
-    
+
     def __str__(self) -> str:
         """prints the hospital record in a nicely formmated string"""
         return f"{self.name} ({self.size()} patients)"
+
 
 class AdminAccount:
     """
@@ -255,21 +261,22 @@ class AdminAccount:
         username(str) : username of the account
         password(str) : password of the account
     """
-    def __init__(self, username:str, password:str):
+    def __init__(self, username: str, password: str):
         self.__username = username
         self.__password = password
-    
+
     @property
     def username(self):
         """returns the username of the account"""
         return self.__username
-    
+
     @property
     def password(self):
         """returns the password of the account"""
         return self.__password       
 
-def load_record_from_file(filename:str) -> None:
+
+def load_record_from_file(filename: str) -> None:
     """
     Loads the hospitalRecord from the file and returns the record
     Args:
@@ -301,6 +308,7 @@ def load_record_from_file(filename:str) -> None:
     # returns the loaded hospitalRecord object
     return hospital_record
 
+
 def save_record_to_file(record: hospitalRecord) -> None:
     """
     Saves the hospitalRecord object in csv files
@@ -312,7 +320,7 @@ def save_record_to_file(record: hospitalRecord) -> None:
         # for each person in the record
         for person in record.patients:
             # writerow() will write items in the list one after another separated by comma
-            csvwriter.writerow(person.display_as_list()) # display_as_list() will return a list
+            csvwriter.writerow(person.display_as_list())  # display_as_list() will return a list
             # gets first name with last name's initial
             first_name_w_l_ini = person.f_name_w_last_ini()
             # open or create the csv file with fisrt name with last name's initial name
@@ -328,8 +336,6 @@ def save_record_to_file(record: hospitalRecord) -> None:
                 for visit in person.visits:
                     # write each row with writerow() function
                     csv_visit_writer.writerow(visit)
-
-
 
 
 def login():
@@ -429,11 +435,13 @@ def change_letter(lst: list, key_for_index: str, key_for_change: str) -> list[st
             pass
     return lst
 
+
 def encrypt(msg: str, key: str = KEY) -> str:
     """
     Convert the string in msg to encrypted msg using the key
     For Example:
-        >>> encrypt("abc", "3WcqHN64fwYOuheZ2B9axvmr7RLT5i08snCFpoSAdKztJXIGEMUVgPkQjDl1by")
+        >>> encrypt("abc", 
+        "3WcqHN64fwYOuheZ2B9axvmr7RLT5i08snCFpoSAdKztJXIGEMUVgPkQjDl1by")
             "YOu"
     Arguments:
         msg (str) : the string that you want to encrypt or convert
@@ -455,7 +463,8 @@ def decrypt(msg, key) -> str:
     """
     Convert the encrypted str in msg to decrypted msg using the key
     For Example:
-        >>>decrypt("YOu", "3WcqHN64fwYOuheZ2B9axvmr7RLT5i08snCFpoSAdKztJXIGEMUVgPkQjDl1by")
+        >>>decrypt("YOu", 
+                 "3WcqHN64fwYOuheZ2B9axvmr7RLT5i08snCFpoSAdKztJXIGEMUVgPkQjDl1by")
             "abc"
     Arguments:
         msg (str) : the string that you want to decrypt
@@ -473,7 +482,7 @@ def decrypt(msg, key) -> str:
     return add_str(lst)
 
 
-def load_accounts(filename:str):
+def load_accounts(filename: str):
     """
     load accounts from the filename
     Args: filename where accounts are stored
@@ -490,12 +499,10 @@ def load_accounts(filename:str):
         # for each row in the file
         for row in reader:
             # row becomes a dictionary if we use DictReader()
-            decrypt_user = decrypt(row['username'], key) # decrpt username using key
-            decrypt_pw = decrypt(row["password"], key) # decrpt password using key
-            # create AdminAccount with decrypted username and password and adds them to the list
+            decrypt_user = decrypt(row['username'], key)  # decrpt username using key
+            decrypt_pw = decrypt(row["password"], key)  # decrpt password using key
+            # create AdminAccount with decrypted username and password 
+            # adds them to the list
             lst.append(AdminAccount(decrypt_user, decrypt_pw))
     # returns the list with the adminaccounts
     return lst
-
-record = load_record_from_file('Testcase.csv')
-print(record.patients[0].visits[0])

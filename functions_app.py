@@ -64,7 +64,7 @@ def print_error(message: str) -> None:
     """
     print(f'Error: {message}', file=sys.stderr)
 
-     
+
 def get_filename() -> str:
     """ Get the filename from the user
     Returns:
@@ -132,16 +132,15 @@ def get_patient_info_for_visit(record: classes.hospitalRecord):
     name = f'{first_name} {last_name}'
     # find the patient using the name
     person = record.find_patient(name)
-    #print(name, person)
     # if it is not found, it will return None
-    if person == None:
+    if person is None:
         print("Patient not found!")
         # use recursion to get the name and search again
         return get_patient_info_for_visit(record)
     else:
         # if found, return the person
         return person
-    
+
 
 def get_add_visit_info():
     """

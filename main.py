@@ -1,6 +1,5 @@
 """
 Main file for Patients' Management Portal
-
 Combined functions from functions_app.py and classes.py
 Name: Hla Htoo
 Semester: Spring 2023
@@ -80,7 +79,7 @@ def add_patient_visit(record: classes.hospitalRecord):
     print("Patient found in record!")
     print(person)
     # calls get_add_visit_info() to get all the required info
-    date, blood_pressure, temp, pulse, oxy_saturation, symptoms, doctor, instructions =functions_app.get_add_visit_info()
+    date, blood_pressure, temp, pulse, oxy_saturation, symptoms, doctor, instructions = functions_app.get_add_visit_info()
     # add_visit_manually to add the visit to the person (create) object
     person.add_visit_manually(date, blood_pressure, temp, pulse, oxy_saturation, symptoms, doctor, instructions)
     print("Visit summary was added successfully to the patient's record")
@@ -132,7 +131,7 @@ def create_new_account():
     with open('account.csv', 'a') as csv_file:
         csvwriter = csv.DictWriter(csv_file, fieldnames=['username', 'password'])
         csvwriter.writerow(account)
-    
+
 
 def main():
     """
@@ -143,7 +142,7 @@ def main():
     # print welcome msg
     functions_app.print_welcome()
     # ask the user to log in and check if it matches the account and username
-    access_granted = classes.login()
+    access_granted = classes.login()  # use "hlahtoo" as username and "spring2023" as password
     # if access_granted is true
     if access_granted:
         # get the command
@@ -187,7 +186,7 @@ def main():
             elif record is None and command != functions_app.ViewOptionsAdmin.UNKNOWN and command != functions_app.ViewOptionsAdmin.EXIT:
                 functions_app.print_error("Make sure to load or create the record data for a hospital")
             else:
-            # if any unknown command was typed in, then print "Unknown command" and menu
+                # if any unknown command was typed in, then print "Unknown command" and menu
                 functions_app.print_error(f"Unknown command")
                 functions_app.print_menu()
             # if continue_to_main is true, that means user wants to change the acc
