@@ -1,3 +1,10 @@
+"""
+Classes file for Patients' Management Portal
+Name: Hla Htoo
+Semester: Spring 2023
+Course : CS5001
+"""
+
 import functions_app
 import classes
 from typing import Union
@@ -129,46 +136,72 @@ def main():
     """
     This is the main entry point fo2r the application.
     """
+    # set the record vairable to none
     record = None
+    # print welcome msg
     functions_app.print_welcome()
+    # ask the user to log in and check if it matches the account and username
     access_granted = classes.login()
+    # if access_granted is true
     if access_granted:
+        # get the command
         command = functions_app.get_command_admin()
-
+        # keep looping until the user wants to exit
         while command != functions_app.ViewOptionsAdmin.EXIT:
+            # continue back to main function default to false unless the user changes account
             continue_to_main = False
+            # if the user wants to load
             if command == functions_app.ViewOptionsAdmin.LOAD:
                 record = handle_load()
+            # if the ser wants to create a new record
             elif command == functions_app.ViewOptionsAdmin.CREATE:
                 record = create_new_record()
+            # if there is a record and the user wants to see the list from record
             elif record and command == functions_app.ViewOptionsAdmin.LIST:
                 print_list(record)
+            # if there is a record and the user wants to add more patients to the record
             elif record and command == functions_app.ViewOptionsAdmin.ADD:
                 add_patient(record)
+            # if there is a record and the user wants to add visit to the patient
             elif record and command == functions_app.ViewOptionsAdmin.ADDVISIT:
                 add_patient_visit(record)
+            # if there is a record and the user wants to remove the patient from the record
             elif record and command == functions_app.ViewOptionsAdmin.REMOVE:
                 remove_patient(record)
+            # if there is a record and the user wants to view one specific patient
             elif record and command == functions_app.ViewOptionsAdmin.VIEW:
                 view_patient_record(record)
+            # If the user wants to create a admin new account
             elif command == functions_app.ViewOptionsAdmin.NEWACCOUNT:
                 create_new_account()
+            # if the user wants to log out and login with another account
             elif command == functions_app.ViewOptionsAdmin.CHANGEACCOUNT:
+                # then set the continue_to_true variable to True
                 continue_to_main = True
+            # if the user wants to save the record in csv files
             elif command == functions_app.ViewOptionsAdmin.SAVE:
                 save_file(record)
+            # if the record is not loaded or created and command is not unknown or exit then print warning msg
             elif record is None and command != functions_app.ViewOptionsAdmin.UNKNOWN and command != functions_app.ViewOptionsAdmin.EXIT:
                 functions_app.print_error("Make sure to load or create the record data for a hospital")
             else:
+            # if any unknown command was typed in, then print "Unknown command" and menu
                 functions_app.print_error(f"Unknown command")
                 functions_app.print_menu()
+            # if continue_to_main is true, that means user wants to change the acc
             if continue_to_main:
+                # call the main function again
                 main()
+                # set the command to exit so that it wont repeat again after recursion
                 command = functions_app.ViewOptionsAdmin.EXIT
+                # then return to stop the main
                 return ...
             else:
+                # unless the user type in exit, keep repeating the command
                 command = functions_app.get_command_admin()
+    # print good bye msg if the user is exiting the program
     functions_app.print_goodbye()
+    # if record is not None, then save the file
     if record:
         save_file(record)
     return ...

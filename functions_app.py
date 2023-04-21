@@ -1,3 +1,10 @@
+"""
+Useful function file for Patients' Management Portal
+Name: Hla Htoo
+Semester: Spring 2023
+Course : CS5001
+"""
+
 from enum import Enum
 import sys
 import classes
