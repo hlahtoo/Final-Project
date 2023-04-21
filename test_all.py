@@ -148,14 +148,14 @@ class TestOthers(unittest.TestCase):
         self.assertEqual(visits, record.patients[0].visits[0])
     
     def test_handle_load(self):
-        """testing handle_load function! Please type in Testcase.csv for filename"""
+        """testing handle_load function! Please type in "Testcase.csv" for filename"""
         record1 = classes.load_record_from_file('Testcase.csv')
         record = main.handle_load()
         self.assertEqual(str(record), str(record1))
         self.assertEqual(record.patients[0].visits[0], record1.patients[0].visits[0])
     
     def test_handle_load2(self):
-        """testing handle_load function by comparing visits! Please type in Testcase.csv for filename"""
+        """testing handle_load function by comparing visits! Please type in "Testcase.csv" for filename"""
         record = main.handle_load()
         visits = {'date': '04/23/23', 'blood_pressure': '120/23', 'temp': '98 °F',
                   'pulse': '98', 'oxygen_saturation': '98 %', 'symptoms': 'chest pain',
@@ -163,7 +163,7 @@ class TestOthers(unittest.TestCase):
         self.assertEqual(visits, record.patients[0].visits[0])
     
     def test_create_new_record(self):
-        """testing create_new_record. Please type in Kaiser"""
+        """testing create_new_record. Please type in 'Kaiser'"""
         record = main.create_new_record()
         self.assertEqual('Kaiser (0 patients)', str(record))
 

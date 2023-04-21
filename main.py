@@ -1,5 +1,7 @@
 """
-Classes file for Patients' Management Portal
+Main file for Patients' Management Portal
+
+Combined functions from functions_app.py and classes.py
 Name: Hla Htoo
 Semester: Spring 2023
 Course : CS5001

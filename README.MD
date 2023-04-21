@@ -5,3 +5,6 @@ As I was writing the codes for the patients’ management portal project, I lear
 I used all kinds of data structures such as string, booleans, lists, tuples, dictionaries, classes and objects in my project which helped me grasp a deeper understanding of how each data structure works. After finishing the project, I genuinely felt that I was indeed improving in this programming journey. I really enjoyed object-oriented programming especially because it provides a way of combining data and functionality together in one play which in turn keeps my codes more organized. During the presentations, I was mesmerized by the user interfaces and functionalities of my classmates’ final projects. Since I also want to add a user interface to my final project, I will work on the user interface as soon as I have some free time after the finals.
 
 My goal has always been to write a fully-functioning program for patients’ management before I graduate from this program. This project is the first step towards that goal and I feel very accomplished that I completed that step. I am aware that there are a lot more improvements that I can make and a lot more features that I can add to the program. As I continue with my studies at Northeastern University I will be tackling one problem after another and grow as a programmer.
+
+Github repository
+https://github.com/hlahtoo/Final-Project
